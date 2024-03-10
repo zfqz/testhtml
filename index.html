@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+ 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>p5.js Sketch</title>
+    <script src="https://ordinals.com/content/b6a50f5ba932b0ea7f652d9d28e59eced47bc6f8376c25e02d8b3457bb60ac8fi0"></script>
+</head>
+<style>
+    body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        canvas {
+            display: block;
+            margin: 0 auto;
+        }
+        </style>
+<body>
+ 
+   <script>
+let margin = 15;
+let Liness = [];
+let palette1 = ["#E53935", "#8E24AA", "#3949AB", "#1E88E5", "#43A047", "#FFB300", "#FB8C00", "#D81B60", "#5E35B1", "#039BE5"];
+let palette2 = ["#02A484", "#016666", "#FFCC34", "#2D9CDB" ];
+let palette3 = ["#4C2E05", "#7A8450", "#AEBD93", "#BEE7B8", "#E36397"];
+let palette4 = ["#6A1B9A", "#AB47BC", "#CE93D8", "#9575CD", "#673AB7"];
+let palette5 = ["#C62828", "#E57373", "#EF5350", "#E53935", "#D32F2F"];
+let palette6 = ["#2E7D32", "#66BB6A", "#A5D6A7", "#81C784", "#4CAF50"];
+let palette7 = ["#EF6C00", "#FFA726", "#FFB74D", "#FB8C00", "#F57C00"];
+let palette8 = ["#00695C", "#26A69A", "#80CBC4", "#00897B", "#00796B"];
+let palette9 = ["#0277BD", "#29B6F6", "#81D4FA", "#039BE5", "#0288D1"];
+let palette10 = ["#F9A825", "#FFEB3B", "#FFF176", "#FDD835", "#FBC02D"];
+let palette11 = ["#6D4C41", "#8D6E63", "#A1887F", "#795548", "#5D4037"];
+let palette12 = ["#D84315", "#FF7043", "#FFAB91", "#FF5722", "#E64A19"];
+let palette13 = ["#4E342E", "#8D6E63", "#A1887F", "#6D4C41", "#5D4037"];
+let palette15 = ["#5F0A87", "#A4508B", "#FFC4EB", "#FF8C94", "#F3DFA2"];
+let palette16 = ["#003F5C", "#58508D", "#BC5090", "#FF6361", "#FFA600"];
+let palette17 = ["#355C7D", "#6C5B7B", "#C06C84", "#F67280", "#F8B195"];
+let palette18 = ["#2A363B", "#E84A5F", "#FF847C", "#FECEA8", "#99B898"];
+let palette19 = ["#FF6B35", "#F7C59F", "#EFEEEE", "#004E89", "#1A659E"];
+let palette20 = ["#3B1F2B", "#DB162F", "#DBDFAC", "#5F758E", "#383961"];
+ 
+let blackLines;
+let palette
+let smooth
+let e
+let f
+let an
+let agnum
+let p
+let blockNumber = 123456
+ 
+function setup() {
+  createCanvas(500, 500);
+  noStroke();
+  noiseSeed(blockNumber)
+	randomSeed(blockNumber)
+  background(250);
+  blackLines = random([0.3,0.7]) < 1/2;
+  smooth = random([0.3,0.7]) < 1/2;
+  palette = random([palette1,palette2,palette3,palette4,palette5,palette6,palette7,palette8,palette9,palette10,palette11,palette12,palette13,palette15,palette16,palette17,palette18,palette19,palette20])
+  e = random([2,3,4,5]);
+  f = random([2,3,4,5]);
+  ag = random([PI,TWO_PI])
+  agnum = random([5,7,10])
+  p = ag/agnum
+  rectMode(CENTER)
+  let circles = [];
+  for (let i = 0; i < 100; i++) {
+    let x = random(margin, width-margin);
+    let y = random(margin, height-margin);
+		gap = random(8,10)
+    let d = gap;
+    let canAdd = true;
+    for (let c of circles) {
+      if (dist(x, y, c.x, c.y) < gap*2.5) {
+        canAdd = false;
+        break;
+      }
+    }
+    if (canAdd) {
+      if (blackLines) fill(random(palette));
+      else fill(5);
+      circle(x, y, d);
+      circles.push(createVector(x, y));
+    }
+  }
+ 
+  Liness.push({
+    circles: circles
+  });
+	angles = random([0,1,2])
+    print(palette)
+    print(blackLines)
+    print(smooth)
+    print(p)
+}
+ 
+function draw() {
+ 
+  let noAddition = true;
+  for (let i = 0; i < 150; i++) {
+    if (makeLinee()) {
+      noAddition = false;
+    }
+  }
+  if (noAddition) noLoop();
+}
+ 
+function makeLinee() {
+ 
+  let Lin = new Linee(random(margin, width-margin), random(margin, height-margin));
+  while (Lin.move());
+  if (Lin.circles.length > 5) {
+    Liness.push(Lin);
+    Lin.draw();
+    return true;
+  }
+  return false;
+}
+ 
+function Linee(x0, y0) {
+  this.x = x0;
+  this.y = y0;
+  this.circles = [createVector(x0, y0)];
+  this.d = 4;
+  this.amp = random(2, 10);
+  let k = random([2,3,4,5]);
+  let l = random([2,3,4,5]);
+  this.move = function() {
+ 
+	let sh = 	this.y-height/e
+	let sw = this.x-width/f
+    let sh2 = 	this.y-height/k
+	let sw2 = this.x-width/l
+ 
+		switch(angles) {
+			case 0:
+				angle = atan2(sh, sw)+p;
+				break;
+			case 1:
+			    angle = noise(this.x / 500, this.y / 500)*1*TAU;
+				break;
+            case 2:
+                angle = atan2(sh2, sw2)+p;
+				break;
+		}
+ 
+    let r = 1;
+    this.x += r * cos(angle);
+    this.y += r * sin(angle);
+    if (this.x < margin || this.x > width-margin || this.y < margin || this.y > height-margin) {
+      return false;
+    }
+    let circ = createVector(this.x, this.y);
+    for (let Lin of Liness) {
+      for (let c of Lin.circles) {
+        if (circ.dist(c) < gap*1.2) return false;
+      }
+    }
+    this.circles.push(circ);
+    return true;
+  }
+ 
+  this.draw = function() {
+    if (blackLines) fill(5);
+    else fill(random(palette));
+    let n = this.circles.length;
+    for (let i = 0; i < n; i++) {
+      let c = this.circles[i];
+      if (smooth) { 
+            circle(c.x, c.y, this.d);
+        } else {
+            rect(c.x, c.y, this.d, this.d);
+        }
+    }
+  }
+}
+ 
+ 
+</script>
+ 
+</body>
+</html>
