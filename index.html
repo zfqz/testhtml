@@ -23,6 +23,20 @@
 <body>
  
    <script>
+function getQueryVariable(variable)
+{
+var query = window.location.search.substring(1);
+var vars = query.split("&");
+for (var i=0;i<vars.length;i++) {
+var pair = vars[i].split("=");
+if(pair[0] == variable){return pair[1];}
+}
+return(false);
+}
+
+let blk = getQueryVariable("blk");
+console.log(blk);
+
 let margin = 15;
 let Liness = [];
 let palette1 = ["#E53935", "#8E24AA", "#3949AB", "#1E88E5", "#43A047", "#FFB300", "#FB8C00", "#D81B60", "#5E35B1", "#039BE5"];
@@ -53,7 +67,7 @@ let f
 let an
 let agnum
 let p
-let blockNumber = 123456
+let blockNumber = blk
  
 function setup() {
   createCanvas(500, 500);
